@@ -33,7 +33,15 @@ void Lights::blinkInfo(const uint32_t color, const bool reverse)
         strip.setPixelColor(tick, color);
 
     if(++tick > front_left.len)
+    {
         tick = 0;
+        for(uint8_t i = 0; i < front_left.len; i++)
+        {
+            strip.setPixelColor(i, 0);
+        }
+    }
+
+    strip.show();
 }
 
 void Lights::setIndicatorLeft(bool val){state.indicator_left = val;};
@@ -44,7 +52,7 @@ void Lights::setParty(bool val){state.party = val;};
 
 void Lights::update()
 {
-    bool indicator = (tick & 0b100);
+    bool indicator = (tick & 0b1000);
     setColorSide(front_left, state.indicator_left && indicator ? 0xFFFF00 : 0);
     setColorSide(rear_left , state.indicator_left && indicator ? 0xFFFF00 : 0);
 

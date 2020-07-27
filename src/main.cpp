@@ -64,8 +64,9 @@ void setup()
     //not yet connected to rosserial server
     while(!nh.connected())
     {
-        lights.blinkInfo(0xfe3fe7, true);
-        delay(100);
+        nh.spinOnce();
+        lights.blinkInfo(0xfe3fa7, true);
+        delay(75);
     }
     lights.setParty(true);
 }
@@ -74,5 +75,5 @@ void loop()
 {
     nh.spinOnce();
     lights.update();
-    delay(125);
+    delay(12);
 }
