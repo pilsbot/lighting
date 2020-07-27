@@ -15,11 +15,10 @@ class Lights
         bool party = false;
     } state;
 
-    enum class Division
+    enum class Direction
     {
-        all,
-        first_half,
-        second_half
+        forward,
+        reverse
     };
 
     uint8_t tick = 0;
@@ -38,5 +37,5 @@ public:
 
     void update();
 private:
-    void setColorSide(const LightPos& pos, const uint32_t color, const Division div = Division::all);
+    void setColorSide(const LightPos& pos, const uint32_t color, const Direction dir, const uint8_t num = 0xFF);
 };

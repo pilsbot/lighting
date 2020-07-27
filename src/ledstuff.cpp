@@ -52,29 +52,30 @@ void Lights::setParty(bool val){state.party = val;};
 
 void Lights::update()
 {
-    bool indicator = (tick & 0b1000);
-    setColorSide(front_left, state.indicator_left && indicator ? 0xFFFF00 : 0);
-    setColorSide(rear_left , state.indicator_left && indicator ? 0xFFFF00 : 0);
+    const uint8_t ticks_per_indication = 0b100000;
+    bool indicator = (tick & ticks_per_indication);
+    setColorSide(front_left, state.indicator_left && indicator ? 0xFFFF00 : 0, Direction::reverse, (tick << 1) & 0b111111);
+    setColorSide(rear_left , state.indicator_left && indicator ? 0xFFFF00 : 0, Direction::forward, (tick << 1) & 0b111111);
 
-    setColorSide(front_right, state.indicator_right && indicator ? 0xFFFF00 : 0);
-    setColorSide(rear_right , state.indicator_right && indicator ? 0xFFFF00 : 0);
+    setColorSide(front_right, state.indicator_right && indicator ? 0xFFFF00 : 0, Direction::forward, (tick << 1) & 0b111111);
+    setColorSide(rear_right , state.indicator_right && indicator ? 0xFFFF00 : 0, Direction::reverse, (tick << 1) & 0b111111);
 
     if(state.headlight)
     {   //For headlights, turning signal has priority
         if(!state.indicator_left)
         {
-            setColorSide(front_left , 0xFFFFFF, Division::second_half);
+            setColorSide(front_left , 0xFFFFFF, Direction::reverse, front_left.len/2);
         }
         if(!state.indicator_right)
         {
-            setColorSide(front_right, 0xFFFFFF, Division::first_half);
+            setColorSide(front_right, 0xFFFFFF, Direction::forward, front_right.len/2);
         }
     }
 
     if(state.brake)
     {   //brake has prio
-        setColorSide(rear_right, 0xFF0000, Division::second_half);
-        setColorSide(rear_left , 0xFF0000, Division::first_half);
+        setColorSide(rear_right, 0xFF0000, Direction::reverse, rear_right.len/2);
+        setColorSide(rear_left , 0xFF0000, Direction::forward, rear_left.len/2);
     }
 
     if(state.party)
@@ -90,11 +91,26 @@ void Lights::update()
 }
 
 
-void Lights::setColorSide(const LightPos& pos, const uint32_t color, const Division div)
+void Lights::setColorSide(const LightPos& pos, const uint32_t color, const Direction dir, const uint8_t num)
 {
-    uint8_t start = div != Division::second_half ? pos.offs : pos.offs + pos.len/2;
-    uint8_t len   = div == Division::all ? pos.len : pos.len/2;
-    for(uint8_t i = start; i < start + len; i++) {
-        strip.setPixelColor(i, color);
+    uint8_t len = num > pos.len ? pos.len : num;
+    if(dir == Direction::forward)
+    {
+        for(uint8_t i = pos.offs; i < pos.offs + len; i++) {
+            strip.setPixelColor(i, color);
+        }
+        for(uint8_t i = pos.offs + len; i < pos.offs + pos.len; i++) {
+            strip.setPixelColor(i, 0);
+        }
     }
+    else
+    {
+        for(uint8_t i = pos.offs + pos.len; i > pos.offs + (pos.len - len); i--) {
+            strip.setPixelColor(i, color);
+        }
+        for(uint8_t i = pos.offs + (pos.len - len); i > pos.offs; i--) {
+            strip.setPixelColor(i, 0);
+        }
+    }
+
 }
