@@ -54,6 +54,7 @@ void Lights::update()
 {
     const uint8_t ticks_per_indication = 0b100000;
     bool indicator = (tick & ticks_per_indication);
+    //indicators
     setColorSide(front_left, state.indicator_left && indicator ? 0xFFFF00 : 0, Direction::reverse, (tick << 1) & 0b111111);
     setColorSide(rear_left , state.indicator_left && indicator ? 0xFFFF00 : 0, Direction::forward, (tick << 1) & 0b111111);
 
@@ -64,11 +65,13 @@ void Lights::update()
     {   //For headlights, turning signal has priority
         if(!state.indicator_left)
         {
-            setColorSide(front_left , 0xFFFFFF, Direction::reverse, front_left.len/2);
+            setColorSide(front_left, 0xFFFFFF, Direction::reverse, front_left.len/2);
+            setColorSide(rear_left , 0xA00000, Direction::forward, rear_left.len/2);
         }
         if(!state.indicator_right)
         {
             setColorSide(front_right, 0xFFFFFF, Direction::forward, front_right.len/2);
+            setColorSide(rear_right , 0xA01010, Direction::reverse, rear_right.len/2);
         }
     }
 
@@ -105,10 +108,10 @@ void Lights::setColorSide(const LightPos& pos, const uint32_t color, const Direc
     }
     else
     {
-        for(uint8_t i = pos.offs + pos.len; i > pos.offs + (pos.len - len); i--) {
+        for(int16_t i = pos.offs + pos.len; i > pos.offs + (pos.len - len); i--) {
             strip.setPixelColor(i, color);
         }
-        for(uint8_t i = pos.offs + (pos.len - len); i > pos.offs; i--) {
+        for(int16_t i = pos.offs + (pos.len - len); i >= pos.offs; i--) {
             strip.setPixelColor(i, 0);
         }
     }

@@ -75,5 +75,5 @@ void loop()
 {
     nh.spinOnce();
     lights.update();
-    delay(12);
+    delay(15);
 }
