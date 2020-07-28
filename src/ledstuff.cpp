@@ -66,12 +66,12 @@ void Lights::update()
         if(!state.indicator_left)
         {
             setColorSide(front_left, 0xFFFFFF, Direction::reverse, front_left.len/2);
-            setColorSide(rear_left , 0xA00000, Direction::forward, rear_left.len/2);
+            setColorSide(rear_left , 0x800101, Direction::forward, rear_left.len/2);
         }
         if(!state.indicator_right)
         {
             setColorSide(front_right, 0xFFFFFF, Direction::forward, front_right.len/2);
-            setColorSide(rear_right , 0xA01010, Direction::reverse, rear_right.len/2);
+            setColorSide(rear_right , 0x800101, Direction::reverse, rear_right.len/2);
         }
     }
 
