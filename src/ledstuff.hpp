@@ -37,5 +37,5 @@ public:
 
     void update();
 private:
-    void setColorSide(const LightPos& pos, const uint32_t color, const Direction dir, const uint8_t num = 0xFF);
+    void setColorSide(const LightPos& pos, const uint32_t color, const Direction dir, const uint8_t num = 0xFF, bool overwrite = false);
 };

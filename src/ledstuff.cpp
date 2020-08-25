@@ -66,7 +66,7 @@ void Lights::update()
         if(!state.indicator_left)
         {
             setColorSide(front_left, 0xFFFFFF, Direction::reverse, front_left.len/2);
-            setColorSide(rear_left , 0x800101, Direction::forward, rear_left.len/2);
+            setColorSide(rear_left , 0x600101, Direction::forward, rear_left.len/2);
         }
         if(!state.indicator_right)
         {
@@ -77,8 +77,8 @@ void Lights::update()
 
     if(state.brake)
     {   //brake has prio
-        setColorSide(rear_right, 0xFF0000, Direction::reverse, rear_right.len/2);
-        setColorSide(rear_left , 0xFF0000, Direction::forward, rear_left.len/2);
+        setColorSide(rear_right, 0xFF0000, Direction::reverse, rear_right.len/2, false);
+        setColorSide(rear_left , 0xFF0000, Direction::forward, rear_left.len/2, false);
     }
 
     if(state.party)
@@ -94,7 +94,7 @@ void Lights::update()
 }
 
 
-void Lights::setColorSide(const LightPos& pos, const uint32_t color, const Direction dir, const uint8_t num)
+void Lights::setColorSide(const LightPos& pos, const uint32_t color, const Direction dir, const uint8_t num, bool overwrite)
 {
     uint8_t len = num > pos.len ? pos.len : num;
     if(dir == Direction::forward)
@@ -102,7 +102,7 @@ void Lights::setColorSide(const LightPos& pos, const uint32_t color, const Direc
         for(uint8_t i = pos.offs; i < pos.offs + len; i++) {
             strip.setPixelColor(i, color);
         }
-        for(uint8_t i = pos.offs + len; i < pos.offs + pos.len; i++) {
+        for(uint8_t i = pos.offs + len; overwrite && i < pos.offs + pos.len; i++) {
             strip.setPixelColor(i, 0);
         }
     }
@@ -111,7 +111,7 @@ void Lights::setColorSide(const LightPos& pos, const uint32_t color, const Direc
         for(int16_t i = pos.offs + pos.len; i > pos.offs + (pos.len - len); i--) {
             strip.setPixelColor(i, color);
         }
-        for(int16_t i = pos.offs + (pos.len - len); i >= pos.offs; i--) {
+        for(int16_t i = pos.offs + (pos.len - len); overwrite && i >= pos.offs; i--) {
             strip.setPixelColor(i, 0);
         }
     }
