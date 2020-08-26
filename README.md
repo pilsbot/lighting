@@ -7,7 +7,8 @@ It shall listen for the topics
 
 all as std_msgs::Bool
 
-This node takes ip 192.168.4.5 and expects ROS master at 192.168.4.1
 start listener on remote with
+`rosrun rosserial_python serial_node.py tcp 11411`
 
-rosrun rosserial_python serial_node.py tcp 11411
+If not yet configured, it will open an SSID "pilsbot_lights" with the default password `test1234`.
+Static IP is not supported anymore.
