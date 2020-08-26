@@ -2,7 +2,7 @@ This is the code for the indicator lighting.
 
 It shall listen for the topics
 - /lighting/indicator/{left, right}
-- /lighting/{brake, head}
+- /lighting/{brake, headlight}       #Note: Headlight turns on front and rear light
 - /lighting/party
 
 all as std_msgs::Bool
