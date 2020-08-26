@@ -21,6 +21,16 @@ class Lights
         reverse
     };
 
+    struct Colors
+    {
+        uint32_t headlight = 0xFFFFFF;
+        uint32_t taillight = 0x300000;
+        uint32_t indicator = 0xFFFF00;
+        uint32_t brake     = 0xFF0000;
+        uint32_t party     = 0xAA00BB;
+    } colors;
+
+
     uint8_t tick = 0;
 public:
 
@@ -37,5 +47,5 @@ public:
 
     void update();
 private:
-    void setColorSide(const LightPos& pos, const uint32_t color, const Direction dir, const uint8_t num = 0xFF, bool overwrite = false);
+    void setColorSide(const LightPos& pos, const uint32_t color, const Direction dir, const uint8_t num = 0xFF, bool overwrite_rest = false);
 };

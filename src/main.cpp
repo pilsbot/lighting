@@ -123,7 +123,13 @@ void setup()
     nh.subscribe(hl);
     nh.subscribe(pa);
 
+    //debug
+    lights.setParty(true);
+    lights.setIndicatorLeft(true);
+    lights.setHeadlight(true);
+
     //not yet connected to rosserial server
+    lights.blinkInfo(0xfe3fa7, true);
     while(!nh.connected())
     {
         nh.spinOnce();
@@ -131,7 +137,6 @@ void setup()
         iotWebConf.delay(75);
     }
     lights.clear();
-    lights.setParty(true);
 }
 
 void loop()
