@@ -1,3 +1,6 @@
+# This repo is not maintained anymore
+Ros2 dropped support for Rosserial. Meh.
+
 This is the code for the indicator lighting.
 
 It shall listen for the topics
